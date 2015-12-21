@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9060" systemVersion="14F1509" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="CYF-B5-oCN">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9051"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+    </dependencies>
+    <scenes>
+        <!--Map View Controller-->
+        <scene sceneID="tne-QT-ifu">
+            <objects>
+                <viewController id="BYZ-38-t0r" customClass="MapViewController" customModule="VirtualTourist" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
+                        <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="qxx-D3-2bz">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                            </mapView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="qxx-D3-2bz" firstAttribute="bottom" secondItem="wfy-db-euE" secondAttribute="top" id="8c4-Lo-RCY"/>
+                            <constraint firstAttribute="trailing" secondItem="qxx-D3-2bz" secondAttribute="trailing" id="KEz-qy-Q89"/>
+                            <constraint firstItem="qxx-D3-2bz" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="j1m-TZ-YD6"/>
+                            <constraint firstItem="qxx-D3-2bz" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="lLo-7g-93d"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="qLh-au-gbd"/>
+                    <connections>
+                        <outlet property="mapView" destination="qxx-D3-2bz" id="P5A-WX-hQt"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1125" y="359"/>
+        </scene>
+        <!--Image Collection View Controller-->
+        <scene sceneID="Hmg-Y7-6Xu">
+            <objects>
+                <collectionViewController storyboardIdentifier="ImageCollectionViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="tOB-RU-EUo" customClass="ImageCollectionViewController" customModule="VirtualTourist" customModuleProvider="target" sceneMemberID="viewController">
+                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="NaG-sS-Q1C">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="rOc-Ob-7ER">
+                            <size key="itemSize" width="196" height="206"/>
+                            <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                            <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                            <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                        </collectionViewFlowLayout>
+                        <cells>
+                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="FlickrImage" id="9xP-6l-SwS" customClass="FlickrCollectionViewCell" customModule="VirtualTourist" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="64" width="196" height="206"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                    <rect key="frame" x="0.0" y="0.0" width="196" height="206"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Loading Image" translatesAutoresizingMaskIntoConstraints="NO" id="moQ-ni-yAa">
+                                            <rect key="frame" x="0.0" y="0.0" width="188" height="206"/>
+                                        </imageView>
+                                    </subviews>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                </view>
+                                <constraints>
+                                    <constraint firstItem="moQ-ni-yAa" firstAttribute="leading" secondItem="9xP-6l-SwS" secondAttribute="leading" id="BbD-on-RMb"/>
+                                    <constraint firstItem="moQ-ni-yAa" firstAttribute="top" secondItem="9xP-6l-SwS" secondAttribute="top" id="E5Z-NP-TRe"/>
+                                    <constraint firstAttribute="bottom" secondItem="moQ-ni-yAa" secondAttribute="bottom" id="KEw-aI-0CR"/>
+                                    <constraint firstItem="moQ-ni-yAa" firstAttribute="trailing" secondItem="9xP-6l-SwS" secondAttribute="trailingMargin" id="j7J-CY-XwC"/>
+                                </constraints>
+                                <connections>
+                                    <outlet property="mainImage" destination="moQ-ni-yAa" id="8zo-zd-FDO"/>
+                                </connections>
+                            </collectionViewCell>
+                        </cells>
+                        <connections>
+                            <outlet property="dataSource" destination="tOB-RU-EUo" id="DWP-UM-6eO"/>
+                            <outlet property="delegate" destination="tOB-RU-EUo" id="vXA-1d-TBZ"/>
+                        </connections>
+                    </collectionView>
+                    <navigationItem key="navigationItem" id="5KA-uc-KjG">
+                        <barButtonItem key="rightBarButtonItem" systemItem="refresh" id="asb-uZ-NmP">
+                            <connections>
+                                <action selector="reloadPhotosFromFlikr:" destination="tOB-RU-EUo" id="d4v-O2-qe7"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="viewFlow" destination="Ksn-Vn-qjr" id="eKw-wz-eE5"/>
+                    </connections>
+                </collectionViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Z0c-0N-Zy8" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <collectionViewFlowLayout minimumLineSpacing="10" minimumInteritemSpacing="10" id="Ksn-Vn-qjr">
+                    <size key="itemSize" width="196" height="206"/>
+                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                </collectionViewFlowLayout>
+            </objects>
+            <point key="canvasLocation" x="1854" y="359"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="ybL-FC-646">
+            <objects>
+                <navigationController storyboardIdentifier="ImageCollectionNavigationController" automaticallyAdjustsScrollViewInsets="NO" useStoryboardIdentifierAsRestorationIdentifier="YES" id="CYF-B5-oCN" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="M6p-rq-9gF">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="BYZ-38-t0r" kind="show" id="lDe-pc-l5M"/>
+                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="rootViewController" id="5Mb-sE-der"/>
+                        <segue destination="tOB-RU-EUo" kind="show" identifier="ShowImages" id="m7G-QX-dh4"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="kn5-0d-aOU" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="370" y="359"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="Loading Image" width="144" height="108"/>
+    </resources>
+    <inferredMetricsTieBreakers>
+        <segue reference="lDe-pc-l5M"/>
+    </inferredMetricsTieBreakers>
+</document>
