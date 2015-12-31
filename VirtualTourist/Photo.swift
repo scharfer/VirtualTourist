@@ -11,14 +11,14 @@ import CoreData
 class Photo : NSManagedObject {
 
     @NSManaged var photoUrl : String
-    @NSManaged var filePath : String?
+    @NSManaged var fileName : String?
     @NSManaged var pin: Pin
     
     override init(entity: NSEntityDescription, insertIntoManagedObjectContext context: NSManagedObjectContext?) {
         super.init(entity: entity, insertIntoManagedObjectContext: context)
     }
     
-    init(photoUrl: String, filePath: String?, pin: Pin, context: NSManagedObjectContext) {
+    init(photoUrl: String, fileName: String?, pin: Pin, context: NSManagedObjectContext) {
         let entity =  NSEntityDescription.entityForName("Photo", inManagedObjectContext: context)!
         
         // Now we can call an init method that we have inherited from NSManagedObject. Remember that
@@ -28,7 +28,7 @@ class Photo : NSManagedObject {
         
         
         self.photoUrl = photoUrl
-        self.filePath = filePath
+        //self.fileName = fileName
         self.pin = pin
     }
 

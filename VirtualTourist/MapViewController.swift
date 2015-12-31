@@ -119,7 +119,7 @@ class MapViewController: UIViewController, UIGestureRecognizerDelegate, MKMapVie
             let annotation = view.annotation as! MyImagesAnnotation
             selectedPin = annotation.pin
             if (selectedPin.photos.count == 0 ) {
-                FlickrWSClient.sharedInstance().callFlickrForImages(annotation.pin!, callBack: flickImageResults)
+                FlickrWSClient.sharedInstance.callFlickrForImages(annotation.pin!, pages: 1, callBack: flickImageResults)
             } else {
                 // we already have the images just send to collection
                 sendToPhotos()
@@ -135,13 +135,16 @@ class MapViewController: UIViewController, UIGestureRecognizerDelegate, MKMapVie
         } else {
             //print(result)
             let perPage = result!["photos"]??["perpage"] as? Int
+            let pages  = result!["photos"]??["pages"] as? Int
             if let perPage = perPage {
                 dispatch_async(dispatch_get_main_queue(), {
                     var photos = [Photo]()
                     for photo in result!["photos"]??["photo"] as! [AnyObject] {
-                        let photo = Photo(photoUrl: photo["url_m"] as! String, filePath: nil, pin: self.selectedPin, context: self.sharedContext)
+                        let photo = Photo(photoUrl: photo["url_m"] as! String, fileName: nil, pin: self.selectedPin, context: self.sharedContext)
                         photos.append(photo)
                     }
+                    
+                    self.selectedPin.pages = pages!
                 
                     CoreDataStackManager.sharedInstance().saveContext()
                     

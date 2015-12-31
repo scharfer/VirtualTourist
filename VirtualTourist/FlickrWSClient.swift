@@ -16,6 +16,7 @@ class FlickrWSClient : NSObject {
     let API_KEY = "ecc4e039c43488324795037aa3903e81"
     let BOUNDING_BOX_HALF_WIDTH = 1.0
     let BOUNDING_BOX_HALF_HEIGHT = 1.0
+    let PER_PAGE = 20
     let LAT_MIN = -90.0
     let LAT_MAX = 90.0
     let LON_MIN = -180.0
@@ -31,18 +32,26 @@ class FlickrWSClient : NSObject {
         super.init()
     }
     
-    func callFlickrForImages(pin : Pin, callBack : (result: AnyObject?, error: NSError? ) -> Void) {
+    func callFlickrForImages(pin : Pin, pages: Int, callBack : (result: AnyObject?, error: NSError? ) -> Void) {
+        let randomIndex = arc4random() % UInt32(pages) + 1
+        
+        //print(randomIndex)
+        
         let methodArguments = [
             "method": METHOD_NAME,
             "api_key": API_KEY,
+            "per_page": PER_PAGE,
+            "page": Int(randomIndex),
             "bbox": createBoundingBoxString(pin.longitude as Double, latitude: pin.latitude as Double),
             "safe_search": "1",
             "extras": "url_m",
             "format": "json",
             "nojsoncallback": "1"
         ]
-        print("getting flik images")
-        makeWSRequest(BASE_URL, params: methodArguments, requestType: "GET", requestData: nil, headerAttrs: nil, callBack: callBack)
+        
+        
+        //print("getting flik images")
+        makeWSRequest(BASE_URL, params: methodArguments as! [String : AnyObject], requestType: "GET", requestData: nil, headerAttrs: nil, callBack: callBack)
 
     }
     
@@ -132,7 +141,7 @@ class FlickrWSClient : NSObject {
     }
     
     func downloadImage(photo: Photo, indexPath: NSIndexPath, callBack : (indexPath: NSIndexPath?, photo: Photo?, error: NSError? ) -> Void) -> NSURLSessionDownloadTask {
-        print("getting image: " + photo.photoUrl)
+        //print("getting image: " + photo.photoUrl)
         
         let request = NSURL(string: photo.photoUrl)
         
@@ -155,7 +164,7 @@ class FlickrWSClient : NSObject {
             let filePath = NSURL.fileURLWithPathComponents(pathArray)
             // move file to documents directory
             try! self.fileManager.moveItemAtURL(location!, toURL: filePath!)
-            photo.filePath = filePath!.path
+            photo.fileName = photoName
             
             callBack(indexPath: indexPath, photo: photo, error: nil)
             
@@ -200,14 +209,16 @@ class FlickrWSClient : NSObject {
         return (!urlVars.isEmpty ? "?" : "") + urlVars.joinWithSeparator("&")
     }
     
-    class func sharedInstance() -> FlickrWSClient {
-        
-        struct Singleton {
-            static var sharedInstance = FlickrWSClient()
-        }
-        
-        return Singleton.sharedInstance
+    func getFilePath(fileName: String) -> String {
+        let dirPath = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] as String
+        // create the filename and add a uuid to make sure unique
+        let pathArray = [dirPath, fileName]
+        let filePath = NSURL.fileURLWithPathComponents(pathArray)
+        return filePath!.path!
     }
+
+    
+    static var sharedInstance = FlickrWSClient()
 
 
 }

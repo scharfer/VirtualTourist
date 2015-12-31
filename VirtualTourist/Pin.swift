@@ -13,6 +13,7 @@ class Pin : NSManagedObject {
     @NSManaged var longitude : NSNumber
     //Not sure why this doesn't work @NSManaged var photos: [Photo]
     @NSManaged var photos: NSMutableSet
+    @NSManaged var pages: NSNumber
     
     override init(entity: NSEntityDescription, insertIntoManagedObjectContext context: NSManagedObjectContext?) {
         super.init(entity: entity, insertIntoManagedObjectContext: context)
@@ -29,6 +30,7 @@ class Pin : NSManagedObject {
         
         self.latitude = latitude
         self.longitude = longitude
+        pages = 1
         //photos = [Photo]()
     }
     

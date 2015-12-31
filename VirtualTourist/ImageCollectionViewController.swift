@@ -13,6 +13,7 @@ private let reuseIdentifier = "FlickrImage"
 
 class ImageCollectionViewController: UICollectionViewController {
     
+    let wsClient = FlickrWSClient.sharedInstance
     var selectedPin : Pin!
     var imageCount : Int = 0
 
@@ -55,14 +56,14 @@ class ImageCollectionViewController: UICollectionViewController {
         let photos = selectedPin.photos.allObjects
         let photo = photos[indexPath.row] as! Photo
         
-        if let filePath = photo.filePath {
-            if (fileManager.fileExistsAtPath(filePath)) {
-                cell.mainImage.image = UIImage(contentsOfFile: filePath)
+        if let fileName = photo.fileName {
+            if (fileManager.fileExistsAtPath(FlickrWSClient.sharedInstance.getFilePath(fileName))) {
+                cell.mainImage.image = UIImage(contentsOfFile: wsClient.getFilePath(fileName))
             } else {
-                FlickrWSClient.sharedInstance().downloadImage(photo, indexPath: indexPath, callBack: imageDownloaded)
+                FlickrWSClient.sharedInstance.downloadImage(photo, indexPath: indexPath, callBack: imageDownloaded)
             }
         } else {
-            FlickrWSClient.sharedInstance().downloadImage(photo, indexPath: indexPath, callBack: imageDownloaded)
+            FlickrWSClient.sharedInstance.downloadImage(photo, indexPath: indexPath, callBack: imageDownloaded)
         }
         
         
@@ -74,7 +75,8 @@ class ImageCollectionViewController: UICollectionViewController {
             dispatch_async(dispatch_get_main_queue(), {
                 let newCell = self.collectionView?.cellForItemAtIndexPath(indexPath) as? FlickrCollectionViewCell
                 if let newCell = newCell {
-                    newCell.mainImage.image = UIImage(contentsOfFile: (photo?.filePath)!)
+                    let path = self.wsClient.getFilePath((photo?.fileName)!)
+                    newCell.mainImage.image = UIImage(contentsOfFile: path)
                     CoreDataStackManager.sharedInstance().saveContext()
                 }
             })
@@ -90,12 +92,23 @@ class ImageCollectionViewController: UICollectionViewController {
         // Remove the photo from the array
         selectedPin.photos.removeObject(photo)
         
+        imageCount--
+        
         // Remove the cell from the collection
         collectionView.reloadData()
         //collectionView.deleteItemsAtIndexPaths([indexPath])
         
         // Remove from file system
-        try! fileManager.removeItemAtPath(photo.filePath!!)
+        //try! fileManager.removeItemAtPath(photo.filePath!!)
+        if let photo = photo as? Photo {
+            if let fileName = photo.fileName {
+                // Remove from file system
+                let filePath = wsClient.getFilePath(fileName)
+                if fileManager.fileExistsAtPath(filePath) {
+                    try! fileManager.removeItemAtPath(filePath)
+                }
+            }
+        }
 
         // Remove the photo from the context
         sharedContext.deleteObject(photo as! NSManagedObject)
@@ -107,13 +120,16 @@ class ImageCollectionViewController: UICollectionViewController {
     @IBAction func reloadPhotosFromFlikr(sender: AnyObject) {
         
         for photo in selectedPin.photos {
-            
-            // Remove from file system
-            if let filePath = photo.filePath! {
-                if fileManager.fileExistsAtPath(filePath) {
-                    try! fileManager.removeItemAtPath(filePath)
+            if let photo = photo as? Photo {
+                if let fileName = photo.fileName {
+                    // Remove from file system
+                    let filePath = wsClient.getFilePath(fileName)
+                    if fileManager.fileExistsAtPath(filePath) {
+                        try! fileManager.removeItemAtPath(filePath)
+                    }
                 }
             }
+        
             
             // Remove the photo from the context
             sharedContext.deleteObject(photo as! NSManagedObject)
@@ -126,7 +142,8 @@ class ImageCollectionViewController: UICollectionViewController {
         CoreDataStackManager.sharedInstance().saveContext()
         
         // reload the images
-        FlickrWSClient.sharedInstance().callFlickrForImages(selectedPin, callBack: flickImageResults)
+        wsClient.callFlickrForImages(selectedPin, pages: selectedPin.pages as Int, callBack: flickImageResults)
+        
         
     }
    
@@ -145,9 +162,11 @@ class ImageCollectionViewController: UICollectionViewController {
                 dispatch_async(dispatch_get_main_queue(), {
                     var photos = [Photo]()
                     for photo in result!["photos"]??["photo"] as! [AnyObject] {
-                        let photo = Photo(photoUrl: photo["url_m"] as! String, filePath: nil, pin: self.selectedPin, context: self.sharedContext)
+                        let photo = Photo(photoUrl: photo["url_m"] as! String, fileName: nil, pin: self.selectedPin, context: self.sharedContext)
                         photos.append(photo)
                     }
+                    
+                    self.imageCount = photos.count
                     
                     CoreDataStackManager.sharedInstance().saveContext()
                     
