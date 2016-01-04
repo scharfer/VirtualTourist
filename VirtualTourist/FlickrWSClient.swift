@@ -32,10 +32,17 @@ class FlickrWSClient : NSObject {
         super.init()
     }
     
-    func callFlickrForImages(pin : Pin, pages: Int, callBack : (result: AnyObject?, error: NSError? ) -> Void) {
-        let randomIndex = arc4random() % UInt32(pages) + 1
+    func callFlickrForImages(pin : Pin, var pages: Int, callBack : (result: AnyObject?, error: NSError? ) -> Void) {
+        
+        // can't go over 200 pages
+        if (pages >= 200) {
+            pages = 199
+        }
+        var randomIndex = arc4random() % UInt32(pages) + 1
         
         print("page: \(randomIndex)")
+        print("pages: \(pages)")
+    
         
         let methodArguments = [
             "method": METHOD_NAME,
