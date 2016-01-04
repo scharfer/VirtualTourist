@@ -11,7 +11,6 @@ import CoreData
 class Pin : NSManagedObject {
     @NSManaged var latitude : NSNumber
     @NSManaged var longitude : NSNumber
-    //Not sure why this doesn't work @NSManaged var photos: [Photo]
     @NSManaged var photos: NSMutableSet
     @NSManaged var pages: NSNumber
     
