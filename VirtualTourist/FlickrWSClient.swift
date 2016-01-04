@@ -35,7 +35,7 @@ class FlickrWSClient : NSObject {
     func callFlickrForImages(pin : Pin, pages: Int, callBack : (result: AnyObject?, error: NSError? ) -> Void) {
         let randomIndex = arc4random() % UInt32(pages) + 1
         
-        //print(randomIndex)
+        print("page: \(randomIndex)")
         
         let methodArguments = [
             "method": METHOD_NAME,
@@ -124,6 +124,7 @@ class FlickrWSClient : NSObject {
             var parsedResult: AnyObject!
             do {
                 parsedResult = try NSJSONSerialization.JSONObjectWithData(data, options: .AllowFragments)
+                //print(parsedResult)
             } catch {
                 let userInfo = [NSLocalizedDescriptionKey : "Could not parse the data as JSON: '\(data)'"]
                 callBack(result: nil, error: NSError(domain: "parseJSONWithCompletionHandler", code: 102, userInfo: userInfo))

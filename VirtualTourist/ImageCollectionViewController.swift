@@ -135,8 +135,17 @@ class ImageCollectionViewController: UICollectionViewController {
             sharedContext.deleteObject(photo as! NSManagedObject)
 
         }
-        // remove all the old images
-        selectedPin.photos.removeAllObjects()
+        let items = collectionView?.numberOfItemsInSection(0)
+        if let items = items {
+            // reset back to loading image
+            for index in 1...items {
+                let indexPath = NSIndexPath(forItem: index-1, inSection: 0)
+                let cell = collectionView?.cellForItemAtIndexPath(indexPath) as? FlickrCollectionViewCell
+                if let cell = cell {
+                    cell.mainImage.image = UIImage(named: "Loading Image")
+                }
+            }
+        }
         
         // save the removal
         CoreDataStackManager.sharedInstance().saveContext()
